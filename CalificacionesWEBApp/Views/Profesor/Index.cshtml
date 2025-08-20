@@ -1,0 +1,63 @@
+﻿@model IEnumerable<CalificacionesWEBApp.Models.Entidades.ProfesorModel>
+
+@{
+    ViewData["Title"] = "Profesor";
+}
+
+<h1>Index</h1>
+<p>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoProfesorModal">
+        Nuevo Profesor
+    </button>
+</p>
+<table class="table table-bordered table-responsive">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Especialidad)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Especialidad)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div class="modal fade" id="nuevoProfesorModal" tabindex="-1" role="dialog" aria-labelledby="Nuevo Profesor" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <label for="nombreProfesor">Nombre y Apellidos</label>
+                <input id="nuevoNombre" type="text" class="form-control" placeholder="Nombre" aria-label="Nombre">
+                <label for="especialidadProfesor">Especialidad</label>
+                <input id="nuevoEspecialidad" type="text" class="form-control" placeholder="Especialidad" aria-label="Especialidad">
+            </div> 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" onclick="guardarProfesor()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
