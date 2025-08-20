@@ -4,7 +4,7 @@
     ViewData["Title"] = "Profesor";
 }
 
-<h1>Index</h1>
+<h2>Profesores</h2>
 <p>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoProfesorModal">
         Nuevo Profesor
@@ -13,18 +13,18 @@
 <table class="table table-bordered table-responsive">
     <thead class="table-dark">
         <tr>
-            <th>
+            <th class="align-self-auto">
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
-            <th>
+            <th class="align-self-auto">
                 @Html.DisplayNameFor(model => model.Especialidad)
             </th>
-            <th></th>
+            <th class="align-self-auto">Acciones</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr >
             <td>
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
@@ -32,9 +32,15 @@
                 @Html.DisplayFor(modelItem => item.Especialidad)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editarProfesorModal" onclick="cargarUnProfesorModal(@item.Id)">
+                        <i class="fas fa-edit"></i> Editar
+                </button>
+
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarProfesorModal" onclick="cargarEliminarProfesorModal(@item.Id)">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+
+                
             </td>
         </tr>
 }
@@ -49,10 +55,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <label for="nombreProfesor">Nombre y Apellidos</label>
-                <input id="nuevoNombre" type="text" class="form-control" placeholder="Nombre" aria-label="Nombre">
-                <label for="especialidadProfesor">Especialidad</label>
-                <input id="nuevoEspecialidad" type="text" class="form-control" placeholder="Especialidad" aria-label="Especialidad">
+                <div class="form-group">
+                    <label for="nombreProfesor">Nombre y Apellidos</label>
+                    <input id="nuevoNombre" type="text" class="form-control" placeholder="Nombre" aria-label="Nombre">
+                    <label for="especialidadProfesor">Especialidad</label>
+                    <input id="nuevoEspecialidad" type="text" class="form-control" placeholder="Especialidad" aria-label="Especialidad">
+                </div>
             </div> 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -61,3 +69,43 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="editarProfesorModal" tabindex="-1" role="dialog" aria-labelledby="Editar Profesor" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarTitulo">Editar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nombreProfesor">Nombre y Apellidos</label>
+                    <input id="editarNombre" type="text" class="form-control" placeholder="Nombre" aria-label="Nombre">
+                    <label for="especialidadProfesor">Especialidad</label>
+                    <input id="editarEspecialidad" type="text" class="form-control" placeholder="Especialidad" aria-label="Especialidad">
+                </div>
+            </div>
+            <div class="modal-footer" id="editarBotones">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" id="editarBoton" >Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="eliminarProfesorModal" tabindex="-1" role="dialog" aria-labelledby="Eliminar Profesor" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eliminarTitulo">Eliminar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <h5>¿Está seguro que desea eliminar este profesor?</h5>
+            </div>
+            <div class="modal-footer" id="eliminarBotones">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" id="eliminarBoton">Eliminar</button>
+            </div>
+        </div>
+    </div>

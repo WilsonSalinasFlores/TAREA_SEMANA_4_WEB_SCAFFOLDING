@@ -14,7 +14,9 @@ namespace CalificacionesWEBApp.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var listaProfesores = await _dbContext.Profesores.ToListAsync();
+            var listaProfesores = await _dbContext.Profesores
+                .Where(p => !p.Eliminado)
+                .ToListAsync();
             return View(listaProfesores);
         }
         
