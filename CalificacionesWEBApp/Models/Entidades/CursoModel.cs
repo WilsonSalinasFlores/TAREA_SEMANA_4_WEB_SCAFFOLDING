@@ -8,6 +8,13 @@ namespace CalificacionesWEBApp.Models.Entidades
     [Table("Cursos")]
     public class CursoModel : BaseModel
     {
+        public CursoModel()
+        {
+            
+            Materias = new HashSet<MateriaModel>();
+            Estudiantes = new HashSet<EstudianteModel>();
+        }
+
         [Required]
         public string Nombre { get; set; }
 

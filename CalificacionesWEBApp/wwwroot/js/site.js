@@ -110,3 +110,125 @@ var eliminarProfesor = async (id) => {
     // Recarga la página para mostrar el profesor editado
     location.reload();
 }
+//////////////////////////////////////////////CURSO////////////////////////////////////////////
+
+var guardarCurso = async () => {
+    var nombre = document.getElementById("nuevoNombre").value;
+    var paralelo = document.getElementById("nuevoParalelo").value;
+    var seccion = document.getElementById("nuevoSeccion").value;
+    var periodo = document.getElementById("nuevoPeriodo").value;
+    if (!nombre || !paralelo || !seccion || !periodo) {
+        alert("Por favor, complete todos los campos.");
+        return;
+    }
+    var curso = {
+        nombre: nombre,
+        paralelo: paralelo,
+        seccion: seccion,
+        periodo: periodo,
+        id: 0,
+        eliminado: false,
+        creado: new Date().toISOString(),
+    };
+    console.log("Curso guardado:", curso);
+    await fetch('/api/CursoApi', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(curso)
+    });
+    // Cierra el modal de forma programática
+    var myModal = bootstrap.Modal.getInstance(document.getElementById('nuevoCursoModal'));
+    myModal.hide();
+
+    // Recarga la página para mostrar el nuevo curso
+    location.reload();
+}
+
+
+var cargarUnCursoModal = async (id) => {
+    var response = await fetch(`/api/CursoApi/${id}`);
+    var curso = await response.json();
+    document.getElementById("editarBoton").setAttribute("onclick", `editarCurso(${curso.id})`);
+    document.getElementById("editarNombre").value = curso.nombre;
+    document.getElementById("editarParalelo").value = curso.paralelo;
+    document.getElementById("editarSeccion").value = curso.seccion;
+    document.getElementById("editarPeriodo").value = curso.periodo;
+}
+
+var editarCurso = async (id) => {
+    var nombre = document.getElementById("editarNombre").value;
+    var paralelo = document.getElementById("editarParalelo").value;
+    var seccion = document.getElementById("editarSeccion").value;
+    var periodo = document.getElementById("editarPeriodo").value;
+
+    if (!nombre || !paralelo || !seccion || !periodo) {
+        alert("Por favor, complete todos los campos.");
+        return;
+    }
+
+    var curso = {
+        nombre: nombre,
+        paralelo: paralelo,
+        seccion: seccion,
+        periodo: periodo,
+        id: id,
+        eliminado: false,
+        creado: new Date().toISOString(),
+        actualizado: new Date().toISOString()
+    };
+
+    console.log("Curso editado:", curso);
+    await fetch(`/api/CursoApi/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(curso)
+    });
+
+    // Cierra el modal de forma programática
+    var myModal = bootstrap.Modal.getInstance(document.getElementById('editarCursoModal'));
+    myModal.hide();
+
+    // Recarga la página para mostrar el curso editado
+    location.reload();
+}
+
+var cargarEliminarCursoModal = async (id) => {
+    var response = await fetch(`/api/CursoApi/${id}`);
+    var curso = await response.json();
+    document.getElementById("eliminarBoton").setAttribute("onclick", `eliminarCurso(${curso.id})`);
+    document.getElementById("eliminarTitulo").innerText = `Eliminar ${curso.nombre} "${curso.paralelo}" ${curso.seccion} - ${curso.periodo}`;
+}
+
+var eliminarCurso = async (id) => {
+    var response = await fetch(`/api/CursoApi/${id}`);
+    var cursoAnterior = await response.json();
+
+    var curso = {
+        nombre: cursoAnterior.nombre,
+        paralelo: cursoAnterior.paralelo,
+        seccion: cursoAnterior.seccion,
+        periodo: cursoAnterior.periodo,
+        id: id,
+        eliminado: true,
+        creado: cursoAnterior.creado,
+        actualizado: new Date().toISOString()
+    };
+    console.log("Curso editado:", curso);
+    await fetch(`api/CursoApi/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(curso)
+    });
+    // Cierra el modal de forma programática
+    var myModal = bootstrap.Modal.getInstance(document.getElementById('eliminarCursoModal'));
+    myModal.hide();
+
+    // Recarga la página para mostrar el curso eliminado
+    location.reload();
+}

@@ -3,49 +3,52 @@
 @{
     ViewData["Title"] = "Profesor";
 }
+<div class="form-group w-75 mx-auto shadow p-4">
 
-<h2>Profesores</h2>
-<p>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoProfesorModal">
-        Nuevo Profesor
-    </button>
-</p>
-<table class="table table-bordered table-responsive">
-    <thead class="table-dark">
-        <tr>
-            <th class="align-self-auto">
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th class="align-self-auto">
-                @Html.DisplayNameFor(model => model.Especialidad)
-            </th>
-            <th class="align-self-auto">Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr >
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Especialidad)
-            </td>
-            <td>
-                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editarProfesorModal" onclick="cargarUnProfesorModal(@item.Id)">
-                        <i class="fas fa-edit"></i> Editar
-                </button>
+    <h2>Profesores</h2>
+    <p>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoProfesorModal">
+            Nuevo Profesor
+        </button>
+    </p>
+    <table class="table table-bordered table-responsive">
+        <thead class="table-dark">
+            <tr>
+                <th class="align-self-auto">
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th class="align-self-auto">
+                    @Html.DisplayNameFor(model => model.Especialidad)
+                </th>
+                <th class="align-self-auto">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr >
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Especialidad)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editarProfesorModal" onclick="cargarUnProfesorModal(@item.Id)">
+                            <i class="fas fa-edit"></i> Editar
+                    </button>
 
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarProfesorModal" onclick="cargarEliminarProfesorModal(@item.Id)">
-                    <i class="fas fa-trash"></i> Eliminar
-                </button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarProfesorModal" onclick="cargarEliminarProfesorModal(@item.Id)">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
 
-                
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                    
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>
+
 
 <div class="modal fade" id="nuevoProfesorModal" tabindex="-1" role="dialog" aria-labelledby="Nuevo Profesor" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -109,3 +112,4 @@
             </div>
         </div>
     </div>
+</div>

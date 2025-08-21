@@ -1,0 +1,147 @@
+﻿@model IEnumerable<CalificacionesWEBApp.Models.Entidades.CursoModel>
+
+@{
+    ViewData["Title"] = "Curso";
+}
+<div class="form-group w-75 mx-auto shadow p-4">
+    <h2>Curso</h2>
+    <p>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoCursoModal">
+            Nuevo Curso
+        </button>
+    </p>
+
+    <table class="table table-bordered table-responsive">
+        <thead class="table-dark">
+            <tr>
+                <th>
+                    Grado
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Seccion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Periodo)
+                </th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)  "@Html.DisplayFor(modelItem => item.Paralelo)"
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Seccion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Periodo)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editarCursoModal" onclick="cargarUnCursoModal(@item.Id)">
+                            <i class="fas fa-edit"></i> Editar
+                    </button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarCursoModal" onclick="cargarEliminarCursoModal(@item.Id)">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="nuevoCursoModal" tabindex="-1" role="dialog" aria-labelledby="Nuevo Curso" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Curso</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="nombreCurso">Grado</label>
+                            <input id="nuevoNombre" type="text" class="form-control" placeholder="Grado" aria-label="Grado">
+                        </div>
+                        <div class="col">
+                            <label for="nuevoParalelo">Paralelo</label>
+                            <input id="nuevoParalelo" type="text" class="form-control" placeholder="Paralelo" aria-label="Paralelo">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="nuevoSeccion">Sección</label>
+                        <input id="nuevoSeccion" type="text" class="form-control" placeholder="Sección" aria-label="Sección">
+                    </div>
+                    <div class="form-row">
+                        <label for="nuevoPeriodo">Periodo</label>
+                        <input id="nuevoPeriodo" type="text" class="form-control" placeholder="Periodo" aria-label="Periodo">
+                    </div>
+                </div>
+            </div> 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" onclick="guardarCurso()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editarCursoModal" tabindex="-1" role="dialog" aria-labelledby="Editar Curso" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarCursoModalLabel">Editar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="nombreCurso">Grado</label>
+                            <input id="editarNombre" type="text" class="form-control" placeholder="Grado" aria-label="Grado">
+                        </div>
+                        <div class="col">
+                            <label for="editarParalelo">Paralelo</label>
+                            <input id="editarParalelo" type="text" class="form-control" placeholder="Paralelo" aria-label="Paralelo">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="editarSeccion">Sección</label>
+                        <input id="editarSeccion" type="text" class="form-control" placeholder="Sección" aria-label="Sección">
+                    </div>
+                    <div class="form-row">
+                        <label for="editarPeriodo">Periodo</label>
+                        <input id="editarPeriodo" type="text" class="form-control" placeholder="Periodo" aria-label="Periodo">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="editarBotones">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" id="editarBoton" >Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="eliminarCursoModal" tabindex="-1" role="dialog" aria-labelledby="Eliminar Curso" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eliminarTitulo">Eliminar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <h5>¿Está seguro que desea eliminar este curso?</h5>
+            </div>
+            <div class="modal-footer" id="eliminarBotones">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" id="eliminarBoton">Eliminar</button>
+            </div>
+        </div>
+    </div>
