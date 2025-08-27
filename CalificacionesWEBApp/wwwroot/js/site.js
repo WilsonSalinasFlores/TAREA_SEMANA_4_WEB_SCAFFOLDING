@@ -232,3 +232,150 @@ var eliminarCurso = async (id) => {
     // Recarga la página para mostrar el curso eliminado
     location.reload();
 }
+
+//////////////////////////////////////////////Materia////////////////////////////////////////////
+var CargarSelectsNuevaMateriaModal = async () => {
+    await cargarSelectProfesores(-1, "nuevo");
+    await cargarSelectCursos(-1, "nuevo");
+}
+
+var cargarSelectsModal = async (id) => {
+    var response = await fetch(`/api/MateriaApi/${id}`);
+    var materia = await response.json();
+
+    // Cargar los select de profesores y cursos
+    await cargarSelectProfesores(materia.profesorId, "editar");
+    await cargarSelectCursos(materia.cursoId, "editar");
+
+    // Establecer los valores seleccionados
+ }
+var cargarSelectProfesores = async (selectedId, modal) => {
+    var response = await fetch('/api/ProfesorApi');
+    var profesores = await response.json();
+
+    var select = document.getElementById(`${modal}Profesor`);
+    select.innerHTML = '';
+
+    profesores.forEach(profesor => {
+        var option = document.createElement("option");
+        option.value = profesor.id;
+        option.text = profesor.nombre ;
+        if (profesor.id === selectedId) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+}
+
+var cargarSelectCursos = async (selectedId, modal) => {
+    var response = await fetch('/api/CursoApi');
+    var cursos = await response.json();
+
+    var select =  document.getElementById(`${modal}Curso`);
+    select.innerHTML = '';
+
+    cursos.forEach(curso => {
+        var option = document.createElement("option");
+        option.value = curso.id;
+        option.text = curso.nombre + " " + curso.paralelo + " " + curso.seccion + " - " + curso.periodo;
+        if (curso.id === selectedId) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+}
+
+
+var guardarMateria = async () => {
+    var materia = {
+        nombre: document.getElementById("nuevoNombre").value,
+        profesorId: document.getElementById("nuevoProfesor").value,
+        cursoId: document.getElementById("nuevoCurso").value,
+        eliminado: false,
+        creado: new Date().toISOString(),
+        actualizado: new Date().toISOString()
+
+    };
+    if (materia.nombre.trim()=="" ) {
+        alert("Por favor, complete todos los campos.");
+        return;
+    }
+    await fetch('/api/MateriaApi', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(materia)
+    });
+
+    // Cierra el modal de forma programática
+    var myModal = bootstrap.Modal.getInstance(document.getElementById('nuevaMateriaModal'));
+    myModal.hide();
+
+    // Recarga la página para mostrar la nueva materia
+    location.reload();
+}
+
+var cargarUnaMateriaModal = async (id) => {
+
+    var response = await fetch(`/api/MateriaApi/${id}`);
+    var materia = await response.json();
+
+    await cargarSelectProfesores(materia.profesorId, "editar");
+    await cargarSelectCursos(materia.cursoId, "editar");
+
+    // Establecer los valores en los campos del modal
+    document.getElementById("editarBoton").setAttribute("onclick", `editarMateria(${materia.id})`);
+    document.getElementById("editarNombre").value = materia.nombre;
+    document.getElementById("editarProfesor").value = materia.profesorId;
+    document.getElementById("editarCurso").value = materia.cursoId;
+
+}
+
+var editarMateria = async (id) => {
+
+    var materia = {
+        nombre: document.getElementById("editarNombre").value,
+        profesorId: document.getElementById("editarProfesor").value,
+        cursoId: document.getElementById("editarCurso").value
+    };
+    if (materia.nombre.trim()=="" ) {
+        alert("Por favor, complete todos los campos.");
+        return;
+    }
+    await fetch(`/api/MateriaApi/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(materia)
+    });
+
+    // Cierra el modal de forma programática
+    var myModal = bootstrap.Modal.getInstance(document.getElementById('editarMateriaModal'));
+    myModal.hide();
+
+    // Recarga la página para mostrar la materia editada
+    location.reload();
+}
+
+var cargarEliminarMateriaModal = async (id) => {
+    var response = await fetch(`/api/MateriaApi/${id}`);
+    var materia = await response.json();
+
+    document.getElementById("eliminarBoton").setAttribute("onclick", `eliminarMateria(${materia.id})`);
+    document.getElementById("eliminarTitulo").innerText = `Eliminar ${materia.nombre}`;
+}
+
+var eliminarMateria = async (id) => {
+    await fetch(`/api/MateriaApi/${id}`, {
+        method: 'DELETE'
+    });
+
+    // Cierra el modal de forma programática
+    var myModal = bootstrap.Modal.getInstance(document.getElementById('eliminarMateriaModal'));
+    myModal.hide();
+
+    // Recarga la página para mostrar la materia eliminada
+    location.reload();
+}

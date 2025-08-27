@@ -67,7 +67,7 @@ namespace CalificacionesWEBApp.Migrations
 
                     b.HasIndex("MateriaId");
 
-                    b.ToTable("Calificaciones");
+                    b.ToTable("Calificaciones", (string)null);
                 });
 
             modelBuilder.Entity("CalificacionesWEBApp.Models.Entidades.CursoModel", b =>
@@ -105,7 +105,7 @@ namespace CalificacionesWEBApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cursos");
+                    b.ToTable("Cursos", (string)null);
                 });
 
             modelBuilder.Entity("CalificacionesWEBApp.Models.Entidades.EstudianteModel", b =>
@@ -140,7 +140,7 @@ namespace CalificacionesWEBApp.Migrations
 
                     b.HasIndex("CursoId");
 
-                    b.ToTable("Estudiantes");
+                    b.ToTable("Estudiantes", (string)null);
                 });
 
             modelBuilder.Entity("CalificacionesWEBApp.Models.Entidades.MateriaModel", b =>
@@ -176,7 +176,7 @@ namespace CalificacionesWEBApp.Migrations
 
                     b.HasIndex("ProfesorId");
 
-                    b.ToTable("Materias");
+                    b.ToTable("Materias", (string)null);
                 });
 
             modelBuilder.Entity("CalificacionesWEBApp.Models.Entidades.ProfesorModel", b =>
@@ -206,7 +206,7 @@ namespace CalificacionesWEBApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profesores");
+                    b.ToTable("Profesores", (string)null);
                 });
 
             modelBuilder.Entity("CalificacionesWEBApp.Models.Entidades.CalificacionModel", b =>
