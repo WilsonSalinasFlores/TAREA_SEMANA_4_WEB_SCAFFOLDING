@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CalificacionesWEBApp.Models.Entidades.EstudianteModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="form-group w-75 mx-auto shadow p-4">
+    <h2>Estudianes Matriculados</h2>
+
+    <p>
+
+        <a type="button" class="btn btn-primary" asp-action="Create">Nuevo Estudiante</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Apellido)
+                </th>
+                <th>
+                    Curso/Paralelo/Seccion/Periodo
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Curso.Nombre) @Html.DisplayFor(modelItem => item.Curso.Paralelo) - @Html.DisplayFor(modelItem => item.Curso.Seccion) - @Html.DisplayFor(modelItem => item.Curso.Periodo) 
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>

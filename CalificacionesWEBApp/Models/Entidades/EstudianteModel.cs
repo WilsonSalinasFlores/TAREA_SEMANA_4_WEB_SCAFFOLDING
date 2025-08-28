@@ -16,8 +16,8 @@ namespace CalificacionesWEBApp.Models.Entidades
         [Required]
         [ForeignKey("CursoModel")]
         public int CursoId { get; set; }
-        public CursoModel Curso { get; set; }
+        public CursoModel? Curso { get; set; }
 
-        public ICollection<CalificacionModel> Calificaciones { get; set; }
+        public ICollection<CalificacionModel>? Calificaciones { get; set; }
     }
 }
