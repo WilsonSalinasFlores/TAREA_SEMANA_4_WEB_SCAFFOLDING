@@ -20,7 +20,7 @@ namespace CalificacionesWEBApp.Models.Entidades
 
         [Required]
         [ForeignKey("ProfesorModel")]
-        
+
         public int ProfesorId { get; set; }
         [JsonIgnore]
         public ProfesorModel Profesor { get; set; }
@@ -36,13 +36,13 @@ namespace CalificacionesWEBApp.Models.Entidades
 
     public class MateriaDTO
     {
-        [Required]
         public string Nombre { get; set; }
         [Required]
         public int ProfesorId { get; set; }
         [Required]
         public int CursoId { get; set; }
     }
+    
 
 
 }

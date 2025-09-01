@@ -25,7 +25,26 @@ namespace CalificacionesWEBApp.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CursoModel>>> GetCursos()
         {
-            return await _context.Cursos.ToListAsync();
+            var cursos = await _context.Cursos.Where(c => !c.Eliminado)
+                .OrderByDescending(c => c.Periodo)
+                .ThenBy(c => c.Nombre)
+                .ThenBy(c => c.Paralelo)
+                .ThenBy(c => c.Seccion)
+                .ToListAsync();
+            return cursos;
+        }
+        
+        // GET: api/CursoApi/Periodos
+        [HttpGet("periodo")]
+        public async Task<ActionResult<IEnumerable<CursoModel>>> GetPeriodo()
+        {
+            var periodos = await _context.Cursos
+                .Where(c => !c.Eliminado)
+                .Select(c => c.Periodo)
+                .Distinct()
+                .ToListAsync();
+
+            return Ok(periodos);
         }
 
         // GET: api/CursoApi/5

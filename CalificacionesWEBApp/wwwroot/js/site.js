@@ -379,3 +379,224 @@ var eliminarMateria = async (id) => {
     // Recarga la página para mostrar la materia eliminada
     location.reload();
 }
+
+
+///////////////////////////Calificaciones////////////////////////////////////////////
+var cargarPeriodos = async () => {
+    var response = await fetch(`/Api/CursoApi/periodo/`);
+    var periodos = await response.json();
+
+    var select = document.getElementById("periodo");
+    select.innerHTML = '';
+
+    var option = document.createElement("option");
+    option.value = "";
+    option.text = "-- Seleccione un periodo --";
+    select.appendChild(option);
+    select.addEventListener("change", function() {
+        cargarCalificaciones();
+    });
+    periodos.forEach(periodo => {
+        var option = document.createElement("option");
+        option.value = periodo;
+        option.text = periodo;
+        select.appendChild(option);
+    });
+}
+
+var cargarCalificaciones = async () => {
+    var response = await fetch(`api/CalificacionApi/periodo/${document.getElementById("periodo").value}`);
+    var calificaciones = await response.json();
+
+    var tbody = document.getElementById("calificaciones");
+    tbody.innerHTML = '';
+    console.log(calificaciones);
+    calificaciones.forEach(calificacion => {
+        var tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${calificacion.curso}</td>
+            <td>${calificacion.profesor}</td>
+            <td>${calificacion.materia}</td>
+            <td>${calificacion.nEstudiantes}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+var cargarCurso = async () => {
+    var response = await fetch(`/api/CursoApi`);
+    var cursos = await response.json();
+
+    var select = document.getElementById("SelectCursoId");
+    select.innerHTML = '';
+
+    var option = document.createElement("option");
+    option.value = "";
+    option.text = "-- Seleccione un curso --";
+    select.appendChild(option);
+    cursos.forEach(curso => {
+        var option = document.createElement("option");
+        option.value = curso.id;
+        option.text = curso.nombre+" "+curso.paralelo+" "+curso.seccion+" - "+curso.periodo;
+        select.appendChild(option);
+    });
+}
+
+var cargarProfesores = async () => {
+    var response = await fetch(`/api/ProfesorApi`);
+    var profesores = await response.json();
+
+    var select = document.getElementById("SelectProfesorId");
+    select.innerHTML = '';
+
+    var option = document.createElement("option");
+    option.value = "";
+    option.text = "-- Seleccione un profesor --";
+    select.appendChild(option);
+    profesores.forEach(profesor => {
+        var option = document.createElement("option");
+        option.value = profesor.id;
+        option.text = profesor.nombre;
+        select.appendChild(option);
+    });
+}
+
+var cargarMateriasPorProfesorYCurso = async () => {
+    var profesorId = document.getElementById("SelectProfesorId").value;
+    var cursoId = document.getElementById("SelectCursoId").value;
+    if ( profesorId>0 && cursoId>0) {  
+        var response = await fetch(`/api/MateriaApi/ObtenerMaterias`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Nombre: "", ProfesorId: profesorId, CursoId: cursoId })
+        });
+
+        if (response.ok) {
+            var materias = await response.json();
+            var select = document.getElementById("SelectMateriasId");
+            select.innerHTML = '';
+
+            var option = document.createElement("option");
+            option.value = "";
+            option.text = "-- Seleccione una materia --";
+            select.appendChild(option);
+            materias.forEach(materia => {
+                var option = document.createElement("option");
+                option.value = materia.id;
+                option.text = materia.nombre;
+                select.appendChild(option);
+            });
+        }
+    }
+}
+
+var cargarCalificacionesNuevas = async () => {
+    const CursoId = document.getElementById("SelectCursoId").value;
+    const ProfesorId = document.getElementById("SelectProfesorId").value;
+    const MateriaId = document.getElementById("SelectMateriasId").value;
+
+    if (CursoId && ProfesorId && MateriaId) {
+        var response = await fetch(`/api/CalificacionApi/obtenerCalificaciones`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    CursoId: CursoId,
+                    ProfesorId: ProfesorId,
+                    MateriaId: MateriaId
+                })
+            });
+
+        const calificaciones = await response.json();
+
+        var tbody = document.getElementById("calificacionesEstudiantes");
+        tbody.innerHTML = '';
+        console.log(calificaciones);
+        calificaciones.forEach(calificacion => {
+            var tr = document.createElement("tr");
+            tr.id = `${calificacion.id}`;
+            tr.innerHTML = `
+                <td>${calificacion.estudiante.nombre} ${calificacion.estudiante.apellido}</td>
+                <td>${calificacion.n1}</td>
+                <td>${calificacion.n2}</td>
+                <td>${calificacion.n3}</td>
+                <td>${calificacion.promedio}</td>
+                <td>${calificacion.observacion}</td>
+                <td>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarCalificacionModal" onclick="CargarSelectsEditarCalificacionModal(${calificacion.id})">Editar</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+}
+
+var CargarSelectsEditarCalificacionModal = async (id) => {
+    const response = await fetch(`/api/CalificacionApi/${id}`);
+    const calificacion = await response.json();
+
+    document.getElementById("editarNombre").value = `${calificacion.estudiante.nombre} ${calificacion.estudiante.apellido}`;
+    document.getElementById("editarN1").value = calificacion.n1;
+    document.getElementById("editarN2").value = calificacion.n2;
+    document.getElementById("editarN3").value = calificacion.n3;
+    document.getElementById("editarObservacion").value = calificacion.observacion;
+    document.getElementById("editarBoton").setAttribute("onclick", `editarCalificacion(${calificacion.id})`);
+}
+
+var editarCalificacion = async (id) => {
+    var n1 = parseFloat(document.getElementById("editarN1").value);
+    var n2 = parseFloat(document.getElementById("editarN2").value);
+    var n3 = parseFloat(document.getElementById("editarN3").value);
+    var observacion = document.getElementById("editarObservacion").value;
+
+    if (isNaN(n1) || isNaN(n2) || isNaN(n3)) {
+        alert("Por favor, ingrese valores numéricos válidos para las notas.");
+        return;
+    }
+
+    if (n1 < 0 || n2 < 0 || n3 < 0) {
+        alert("Las notas no pueden ser menores a cero.");
+        return;
+    }
+
+    if (n1 > 10 || n2 > 10 || n3 > 10) {
+        alert("Las notas no pueden ser mayores a diez.");
+        return;
+    }
+
+    const payload = {
+        id: id,
+        n1: n1,
+        n2: n2,
+        n3: n3,
+        promedio: (n1 + n2 + n3) / 3,
+        CursoId: document.getElementById("SelectCursoId").value,
+        MateriaId: document.getElementById("SelectMateriasId").value,
+        ProfesorId: document.getElementById("SelectProfesorId").value,
+        observacion: observacion
+    };
+    console.log(payload);
+    const response = await fetch(`/api/CalificacionApi/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+        // La calificación se editó correctamente
+        alert("Calificación editada correctamente");
+        // Cerrar el modal
+        var modal = bootstrap.Modal.getInstance(document.getElementById("editarCalificacionModal"));
+        modal.hide();
+        // Recargar las calificaciones
+        cargarCalificacionesNuevas();
+    } else {
+        alert("Error al editar la calificación");
+    }
+}

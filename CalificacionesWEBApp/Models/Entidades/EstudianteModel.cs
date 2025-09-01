@@ -1,6 +1,7 @@
 ﻿using CalificacionesWEBApp.Models.Entidades.Base;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CalificacionesWEBApp.Models.Entidades
 {
@@ -17,7 +18,7 @@ namespace CalificacionesWEBApp.Models.Entidades
         [ForeignKey("CursoModel")]
         public int CursoId { get; set; }
         public CursoModel? Curso { get; set; }
-
+        [JsonIgnore]
         public ICollection<CalificacionModel>? Calificaciones { get; set; }
     }
 }

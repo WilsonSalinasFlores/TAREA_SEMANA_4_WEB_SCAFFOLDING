@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Calificaciones Curso";
+}
+<div class="form-group w-75 mx-auto shadow p-4">
+    <div class="row">
+        <h1>Calificaciones</h1>
+
+    </div>
+    <div class="row">
+        <label for="periodo" class="form-label">Periodo</label>
+        <select id="periodo" class="form-select">
+            <option value="">-- Seleccione un periodo --</option>
+        </select>
+    </div>
+    <p></p>
+    <div class="row">
+        <p>
+            <a class="btn btn-primary" asp-action="Create">Nuevas Calificaciones</a>
+        </p>
+    </div>
+    <p></p>
+    <div class="row">   
+        <table class="table table-bordered table-responsive ">
+            <thead class="table-dark">
+                <tr>
+                    <th>
+                        Curso
+                    </th>
+                    <th>
+                        Profesor
+                    </th>
+                    <th>
+                        Materia
+                    </th>
+                    <th>
+                        # Estudiante
+                    </th>
+            </tr>
+        </thead>
+        <tbody id="calificaciones">
+            <tr>
+            </tr>
+        </tbody>
+        
+    </table>
+    </div>
+</div>
+
+ <script>
+    // Llama a la función cargarPeriodos cuando la página esté lista
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarPeriodos();
+    });
+
+    
+</script>

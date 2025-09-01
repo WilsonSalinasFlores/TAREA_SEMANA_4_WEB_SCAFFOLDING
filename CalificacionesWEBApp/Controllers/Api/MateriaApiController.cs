@@ -89,8 +89,6 @@ namespace CalificacionesWEBApp.Controllers.Api
             return NoContent();
         }
 
-        // POST: api/MateriaApi
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<MateriaModel>> PostMateriaModel(MateriaDTO materiaDTO)
         {
@@ -107,6 +105,19 @@ namespace CalificacionesWEBApp.Controllers.Api
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMateriaModel", new { id = materia.Id });
+        }
+
+
+        // POST: api/MateriaApi/ObtenerMaterias
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("ObtenerMaterias")]
+        public async Task<ActionResult<IEnumerable<MateriaModel>>> ObtenerMateriasModel(MateriaDTO materiaDTO)
+        {
+            var materias = await _context.Materias
+                .Where(m => m.ProfesorId == materiaDTO.ProfesorId && m.CursoId == materiaDTO.CursoId && !m.Eliminado)
+                .ToListAsync();
+
+            return Ok(materias);
         }
 
         // DELETE: api/MateriaApi/5

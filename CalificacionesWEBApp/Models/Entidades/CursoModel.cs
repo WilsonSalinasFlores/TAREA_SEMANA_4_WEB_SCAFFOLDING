@@ -1,6 +1,7 @@
 ﻿using CalificacionesWEBApp.Models.Entidades.Base;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CalificacionesWEBApp.Models.Entidades
 {
@@ -27,8 +28,10 @@ namespace CalificacionesWEBApp.Models.Entidades
         [Required]
         public string Periodo { get; set; }
 
-        public ICollection<MateriaModel> Materias { get; set; }
-        public ICollection<EstudianteModel> Estudiantes { get; set; }
+        [JsonIgnore]
+        public ICollection<MateriaModel>? Materias { get; set; }
+        [JsonIgnore]
+        public ICollection<EstudianteModel>? Estudiantes { get; set; }
     }
 }
 

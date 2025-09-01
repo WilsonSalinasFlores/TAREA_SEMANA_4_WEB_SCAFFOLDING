@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewData["Title"] = "Calificaciones";
+}
+
+<div class="form-group w-80 mx-auto shadow p-4">
+    <div class="row">
+        <h2>Calificaciones</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="SelectCursoId" class="control-label">Curso</label>
+                <select id="SelectCursoId" class ="form-control" onchange="cargarMateriasPorProfesorYCurso()">
+                    <option value="">-- Seleccione un curso --</option>
+                    
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="SelectProfesorId" class="control-label">Profesor</label>
+                <select id="SelectProfesorId" class ="form-control" onchange="cargarMateriasPorProfesorYCurso()">
+                    <option value="">-- Seleccione un profesor --</option>
+
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="SelectMateriasId" class="control-label">Materias</label>
+                <select id="SelectMateriasId" class ="form-control" onchange="cargarCalificacionesNuevas()" >
+                    <option value="">-- Seleccione una materia --</option>
+
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <table class="table table-bordered table-responsive" >
+            <thead  class="table-dark">
+                
+                    <th>Estudiante</th>
+                    <th>Nota 1</th>
+                    <th>Nota 2</th>
+                    <th>Nota 3</th>
+                    <th>Promedio</th>
+                    <th>Observación</th>
+                    <th>Acciones</th>
+                
+            </thead>
+            <tbody id="calificacionesEstudiantes">
+                <tr> <!-- Las filas de calificaciones se cargarán aquí dinámicamente -->   </tr>
+                
+            </tbody>
+        </table>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editarCalificacionModal" tabindex="-1" role="dialog" aria-labelledby="Editar Calificación" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarCalificacionModalLabel">Editar Calificación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="editarNombre">Estudiante</label>
+                                <input class="readonly " readonly=""  id="editarNombre" type="text" class="form-control" placeholder="Nombre del Estudiante" aria-label="Nombre del Estudiante">
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="editarN1">Nota 1</label>
+                                <input id="editarN1" maxlength="5" type="text" class="form-control" style="text-align: right;" placeholder="Nota 1" aria-label="Nota 1">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="editarN2">Nota 2</label>
+                                <input id="editarN2" maxlength="5" type="text" class="form-control" style="text-align: right;" placeholder="Nota 2" aria-label="Nota 2">
+                            </div>
+                       </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="editarN3">Nota 3</label>
+                                <input id="editarN3" maxlength="5" type="text" class="form-control" style="text-align: right;" placeholder="Nota 3" aria-label="Nota 3">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group"></div>
+                                <label for="editarObservacion">Observación</label>
+                                <textarea maxlength="500" rows="3" id="editarObservacion" class="form-control" placeholder="Observación" aria-label="Observación"></textarea>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer" id="editarBotones">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success" id="editarBoton">Editar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    // Llama a la función cargarCurso cuando la página esté lista
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarCurso();
+        cargarProfesores();
+    });
+
+    
+</script>

@@ -27,8 +27,14 @@ namespace CalificacionesWEBApp.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProfesorModel>>> GetProfesores()
         {
-            return await _context.Profesores.ToListAsync();
+            var profesores = await _context.Profesores
+                .Where(p => !p.Eliminado)
+                .OrderBy(p => p.Nombre)
+                .ToListAsync();
+            return profesores;
         }
+
+
 
         // GET: api/ProfesorApi/5
         [HttpGet("{id}")]
